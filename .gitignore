@@ -139,6 +139,3 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
-
-# Important folders
-src/ticker_data_csv
