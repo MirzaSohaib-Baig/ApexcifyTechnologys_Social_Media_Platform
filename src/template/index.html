@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pulse — Social</title>
+
+  <!-- Tailwind CDN with custom config -->
+  <script>
+    window.tailwind_config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#f43f5e',
+              light:   '#fb7185',
+              dark:    '#e11d48',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>tailwind.config = window.tailwind_config;</script>
+
+  <!-- Custom styles (gradient borders, fonts, animations — the 5% Tailwind can't do) -->
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+
+<!-- ════════════════════════════════════════════════════════
+     BODY  dark: zinc-950 bg   light: zinc-50 bg
+════════════════════════════════════════════════════════ -->
+<body class="min-h-screen dark:bg-zinc-950 bg-zinc-50 dark:text-zinc-100 text-zinc-900 transition-colors duration-300">
+
+<!-- ══ APP SHELL ══════════════════════════════════════════ -->
+<div class="flex min-h-screen">
+
+  <!-- ── LEFT SIDEBAR (desktop) ─────────────────────────── -->
+  <aside class="hidden md:flex fixed top-0 left-0 h-full w-64 flex-col py-6 px-4 z-40
+                dark:bg-zinc-900/80 bg-white/80 glass
+                border-r dark:border-white/[0.06] border-black/[0.07]">
+
+    <!-- Logo -->
+    <div class="flex items-center gap-2.5 px-3 mb-10">
+      <div class="w-8 h-8 rounded-xl btn-gradient flex items-center justify-center flex-shrink-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <span class="text-xl font-display font-extrabold tracking-tight gradient-text">Pulse</span>
+    </div>
+
+    <!-- Nav links -->
+    <nav class="flex flex-col gap-0.5 flex-1">
+
+      <button data-nav="feed" onclick="showPage('feed')"
+              class="nav-item relative flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors
+                     dark:hover:bg-white/[0.05] hover:bg-black/[0.05]">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Feed
+      </button>
+
+      <button data-nav="explore" onclick="showPage('explore')"
+              class="nav-item relative flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors
+                     dark:text-zinc-400 text-zinc-500 dark:hover:bg-white/[0.05] hover:bg-black/[0.05]">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Explore
+      </button>
+
+      <button data-nav="notifications" onclick="showPage('notifications')"
+              class="nav-item relative flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors
+                     dark:text-zinc-400 text-zinc-500 dark:hover:bg-white/[0.05] hover:bg-black/[0.05]">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Notifications
+        <span class="notif-badge notif-dot ml-auto w-5 h-5 rounded-full text-white text-[10px] font-display font-bold flex items-center justify-center">3</span>
+      </button>
+
+      <button data-nav="messages" onclick="showPage('messages')"
+              class="nav-item relative flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors
+                     dark:text-zinc-400 text-zinc-500 dark:hover:bg-white/[0.05] hover:bg-black/[0.05]">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+        <span class="notif-badge notif-dot ml-auto w-5 h-5 rounded-full text-white text-[10px] font-display font-bold flex items-center justify-center">2</span>
+      </button>
+
+      <button data-nav="profile" onclick="showPage('profile')"
+              class="nav-item relative flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors
+                     dark:text-zinc-400 text-zinc-500 dark:hover:bg-white/[0.05] hover:bg-black/[0.05]">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </button>
+
+      <button data-nav="saved" onclick="showPage('saved')"
+              class="nav-item relative flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors
+                     dark:text-zinc-400 text-zinc-500 dark:hover:bg-white/[0.05] hover:bg-black/[0.05]">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+        Saved
+      </button>
+
+    </nav>
+
+    <!-- New Post -->
+    <button onclick="openPostModal()"
+            class="btn-gradient w-full py-3 rounded-xl text-sm font-display font-bold text-white
+                   flex items-center justify-center gap-2 mt-3">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      New Post
+    </button>
+
+    <!-- Theme toggle + User mini card -->
+    <div class="flex items-center gap-2 mt-4">
+      <button onclick="showPage('profile')"
+              class="flex items-center gap-2.5 flex-1 px-2 py-2.5 rounded-xl transition-colors
+                     dark:hover:bg-white/[0.05] hover:bg-black/[0.05]">
+        <div class="avatar-ring flex-shrink-0">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-display font-bold
+                      dark:bg-zinc-900 bg-rose-50 gradient-text">AJ</div>
+        </div>
+        <div class="flex-1 min-w-0 text-left">
+          <div class="text-xs font-display font-bold dark:text-white text-zinc-900 truncate">Alex Jordan</div>
+          <div class="text-[10px] dark:text-zinc-500 text-zinc-400 truncate">@alexjordan</div>
+        </div>
+      </button>
+      <!-- Logout -->
+      <button onclick="logout()" title="Sign out"
+              class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors
+                     dark:bg-zinc-800 bg-zinc-100 dark:hover:bg-zinc-700 hover:bg-zinc-200
+                     dark:text-zinc-400 text-zinc-500 dark:hover:text-rose-400 hover:text-rose-500">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+      <!-- Theme toggle -->
+      <button onclick="toggleTheme()"
+              class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors
+                     dark:bg-zinc-800 bg-zinc-100 dark:hover:bg-zinc-700 hover:bg-zinc-200
+                     dark:text-zinc-300 text-zinc-600">
+        <span id="icon-sun" class="hidden">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </span>
+        <span id="icon-moon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────── -->
+  <main class="flex-1 md:ml-64 min-h-screen pb-20 md:pb-0">
+    <div class="flex justyfy-center w-full">
+      <div class="w-full max-w-[960px] px-14 py-6">
+
+        <!-- ═══ FEED ══════════════════════════════════════ -->
+        <section data-page="feed" class="hidden">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-display font-extrabold dark:text-white text-zinc-900">Home</h1>
+            <div class="flex gap-2">
+              <button class="w-9 h-9 rounded-xl flex items-center justify-center transition-colors
+                             dark:bg-zinc-800 bg-white border dark:border-white/[0.06] border-black/[0.08]
+                             dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              </button>
+              <button onclick="showPage('messages')"
+                      class="relative w-9 h-9 rounded-xl flex items-center justify-center transition-colors
+                             dark:bg-zinc-800 bg-white border dark:border-white/[0.06] border-black/[0.08]
+                             dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span class="absolute top-1.5 right-1.5 w-2 h-2 notif-dot rounded-full"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Stories -->
+          <div class="mb-6">
+            <div id="stories-row" class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+              <!-- Add Story pill -->
+              <button onclick="openPostModal()"
+                      class="flex flex-col items-center gap-2 flex-shrink-0 group">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center transition-colors
+                            border-2 border-dashed border-rose-400/50 dark:bg-zinc-800/50 bg-rose-50/50
+                            dark:group-hover:border-rose-400 group-hover:border-rose-500">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                </div>
+                <span class="text-xs dark:text-zinc-400 text-zinc-500">Add</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick compose -->
+          <div onclick="openPostModal()" class="cursor-pointer mb-6 p-4 rounded-2xl transition-all
+                        border dark:border-white/[0.06] border-black/[0.07]
+                        dark:bg-zinc-900/70 bg-white/80 glass
+                        dark:hover:border-rose-400/20 hover:border-rose-300/40
+                        hover:-translate-y-0.5 hover:shadow-lg dark:hover:shadow-rose-900/20 hover:shadow-rose-100/60">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="avatar-ring flex-shrink-0">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-display font-bold
+                            dark:bg-zinc-900 bg-rose-50 gradient-text">AJ</div>
+              </div>
+              <div class="flex-1 rounded-xl px-4 py-2.5 text-sm
+                          dark:bg-zinc-800/60 bg-zinc-100/80 dark:text-zinc-500 text-zinc-400
+                          border dark:border-white/[0.04] border-black/[0.05]">
+                What's on your mind, Alex?
+              </div>
+            </div>
+            <div class="flex gap-1 ml-12">
+              <span class="flex items-center gap-1.5 text-xs dark:text-zinc-400 text-zinc-500 px-3 py-1.5 rounded-lg
+                           dark:hover:bg-white/5 hover:bg-black/5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Photo
+              </span>
+              <span class="flex items-center gap-1.5 text-xs dark:text-zinc-400 text-zinc-500 px-3 py-1.5 rounded-lg
+                           dark:hover:bg-white/5 hover:bg-black/5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                Video
+              </span>
+              <span class="flex items-center gap-1.5 text-xs dark:text-zinc-400 text-zinc-500 px-3 py-1.5 rounded-lg
+                           dark:hover:bg-white/5 hover:bg-black/5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                Poll
+              </span>
+            </div>
+          </div>
+
+          <!-- Posts -->
+          <div id="feed-posts" class="flex flex-col gap-5"></div>
+          <div class="flex justify-center mt-8 mb-4">
+            <button onclick="loadMorePosts()"
+                    class="px-6 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-2
+                           dark:bg-zinc-800 bg-white border dark:border-white/[0.06] border-black/[0.08]
+                           dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg>
+              Load more
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══ EXPLORE ════════════════════════════════════ -->
+        <section data-page="explore" class="hidden">
+          <h1 class="text-2xl font-display font-extrabold dark:text-white text-zinc-900 mb-5">Explore</h1>
+          <!-- Search -->
+          <div class="relative mb-6">
+            <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 dark:text-zinc-500 text-zinc-400 pointer-events-none"
+                 width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" oninput="handleSearch(this.value)"
+                   placeholder="Search people, posts, tags…"
+                   class="w-full pl-10 pr-4 py-3 rounded-xl text-sm transition-all
+                          dark:bg-zinc-800/70 bg-white border dark:border-white/[0.06] border-black/[0.08]
+                          dark:text-zinc-100 text-zinc-900 dark:placeholder-zinc-500 placeholder-zinc-400
+                          focus:outline-none focus:ring-2 focus:ring-rose-400/40
+                          dark:focus:border-rose-400/40 focus:border-rose-400/40"/>
+          </div>
+
+          <!-- Trending section -->
+          <div id="explore-trending-section">
+            <h2 class="text-xs font-display font-bold dark:text-zinc-400 text-zinc-500 uppercase tracking-widest mb-3">Trending</h2>
+            <div id="explore-tags-list" class="flex flex-col gap-2 mb-7"></div>
+          </div>
+
+          <!-- People section -->
+          <div id="explore-people-section">
+            <h2 class="text-xs font-display font-bold dark:text-zinc-400 text-zinc-500 uppercase tracking-widest mb-3">People to follow</h2>
+            <div id="explore-people-list" class="flex flex-col gap-3"></div>
+          </div>
+
+          <!-- Search results -->
+          <div id="explore-results-section" class="hidden">
+            <h2 class="text-xs font-display font-bold dark:text-zinc-400 text-zinc-500 uppercase tracking-widest mb-3">Results</h2>
+            <div id="search-results-list" class="flex flex-col gap-3"></div>
+          </div>
+        </section>
+
+        <!-- ═══ NOTIFICATIONS ══════════════════════════════ -->
+        <section data-page="notifications" class="hidden">
+          <div class="flex items-center justify-between mb-5">
+            <h1 class="text-2xl font-display font-extrabold dark:text-white text-zinc-900">Notifications</h1>
+            <button onclick="markAllRead()"
+                    class="text-xs text-rose-400 font-medium hover:text-rose-300 transition-colors">
+              Mark all read
+            </button>
+          </div>
+          <!-- Tabs -->
+          <div data-tab-group class="flex gap-0 mb-6 border-b dark:border-white/[0.05] border-black/[0.07]">
+            <button data-tab-btn onclick="filterNotifs('all', this)"
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 border-rose-400 text-rose-400 transition-colors">All</button>
+            <button data-tab-btn onclick="filterNotifs('likes', this)"
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent dark:text-zinc-400 text-zinc-500 transition-colors">Likes</button>
+            <button data-tab-btn onclick="filterNotifs('comments', this)"
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent dark:text-zinc-400 text-zinc-500 transition-colors">Comments</button>
+            <button data-tab-btn onclick="filterNotifs('follows', this)"
+                    class="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent dark:text-zinc-400 text-zinc-500 transition-colors">Follows</button>
+          </div>
+          <div id="notifications-list" class="flex flex-col gap-1"></div>
+        </section>
+
+        <!-- ═══ MESSAGES ══════════════════════════════════ -->
+        <section data-page="messages" class="hidden">
+          <div class="flex items-center justify-between mb-5">
+            <h1 class="text-2xl font-display font-extrabold dark:text-white text-zinc-900">Messages</h1>
+            <button class="w-9 h-9 rounded-xl flex items-center justify-center transition-colors
+                           dark:bg-zinc-800 bg-white border dark:border-white/[0.06] border-black/[0.08]
+                           dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+          <!-- Search messages -->
+          <div class="relative mb-5">
+            <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 dark:text-zinc-500 text-zinc-400 pointer-events-none"
+                 width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" placeholder="Search messages…"
+                   class="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm
+                          dark:bg-zinc-800/70 bg-white border dark:border-white/[0.06] border-black/[0.08]
+                          dark:text-zinc-100 text-zinc-900 dark:placeholder-zinc-500 placeholder-zinc-400
+                          focus:outline-none focus:ring-2 focus:ring-rose-400/40"/>
+          </div>
+          <div id="messages-list" class="flex flex-col gap-0.5"></div>
+        </section>
+
+        <!-- ═══ PROFILE ════════════════════════════════════ -->
+        <section data-page="profile" class="hidden">
+          <!-- Cover -->
+          <div class="relative mb-4">
+            <div class="w-full h-36 rounded-2xl overflow-hidden cover-gradient">
+              <div class="w-full h-full opacity-30"
+                   style="background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(244,63,94,0.12) 20px,rgba(244,63,94,0.12) 40px)">
+              </div>
+            </div>
+            <div class="absolute -bottom-11 left-5">
+              <div class="avatar-ring" style="padding:3px">
+                <div class="w-[72px] h-[72px] rounded-full flex items-center justify-center
+                            text-2xl font-display font-extrabold gradient-text
+                            dark:bg-zinc-900 bg-white">AJ</div>
+              </div>
+            </div>
+            <button onclick="openEditProfile()"
+                    class="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs
+                           transition-colors dark:bg-zinc-800/80 bg-white/80 glass
+                           border dark:border-white/[0.08] border-black/[0.08]
+                           dark:text-zinc-300 text-zinc-600 dark:hover:text-white hover:text-zinc-900">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit cover
+            </button>
+          </div>
+
+          <div class="mt-14 px-1">
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-xl font-display font-extrabold dark:text-white text-zinc-900">Alex Jordan</h2>
+                  <span class="verified-badge w-5 h-5">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </div>
+                <p class="text-sm dark:text-zinc-500 text-zinc-400">@alexjordan</p>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="openEditProfile()"
+                        class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-colors
+                               dark:bg-zinc-800 bg-white border dark:border-white/[0.06] border-black/[0.08]
+                               dark:text-zinc-300 text-zinc-600 dark:hover:text-white hover:text-zinc-900">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button class="w-9 h-9 rounded-xl flex items-center justify-center transition-colors
+                               dark:bg-zinc-800 bg-white border dark:border-white/[0.06] border-black/[0.08]
+                               dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <p id="profile-bio-text" class="text-sm dark:text-zinc-300 text-zinc-600 leading-relaxed mb-3">
+              Digital creator &amp; developer. Building things at the intersection of design and code. ✨
+            </p>
+
+            <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs dark:text-zinc-400 text-zinc-500 mb-4">
+              <span class="flex items-center gap-1.5">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                San Francisco, CA
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                alexjordan.dev
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Joined March 2022
+              </span>
+            </div>
+
+            <!-- Stats -->
+            <div class="flex gap-6 py-4 border-y dark:border-white/[0.06] border-black/[0.07] mb-4">
+              <div class="text-center">
+                <div class="text-xl font-display font-extrabold dark:text-white text-zinc-900">47</div>
+                <div class="text-xs dark:text-zinc-400 text-zinc-500">Posts</div>
+              </div>
+              <button onclick="openFollowListModal('followers')" class="text-center hover:opacity-70 transition-opacity">
+                <div class="text-xl font-display font-extrabold dark:text-white text-zinc-900">2.4K</div>
+                <div class="text-xs dark:text-zinc-400 text-zinc-500">Followers</div>
+              </button>
+              <button onclick="openFollowListModal('following')" class="text-center hover:opacity-70 transition-opacity">
+                <div class="text-xl font-display font-extrabold dark:text-white text-zinc-900">318</div>
+                <div class="text-xs dark:text-zinc-400 text-zinc-500">Following</div>
+              </button>
+            </div>
+
+            <!-- Profile tabs -->
+            <div data-tab-group class="flex gap-0 border-b dark:border-white/[0.05] border-black/[0.07] mb-5">
+              <button data-tab-btn onclick="switchProfileTab('posts', this)"
+                      class="px-4 py-2.5 text-sm font-medium border-b-2 border-rose-400 text-rose-400">Posts</button>
+              <button data-tab-btn onclick="switchProfileTab('media', this)"
+                      class="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent dark:text-zinc-400 text-zinc-500">Media</button>
+              <button data-tab-btn onclick="switchProfileTab('liked', this)"
+                      class="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent dark:text-zinc-400 text-zinc-500">Liked</button>
+            </div>
+
+            <div id="profile-tab-posts" class="flex flex-col gap-5"></div>
+            <div id="profile-tab-media"  class="hidden grid grid-cols-3 gap-2"></div>
+            <div id="profile-tab-liked"  class="hidden flex flex-col gap-5"></div>
+          </div>
+        </section>
+
+        <!-- ═══ SAVED ══════════════════════════════════════ -->
+        <section data-page="saved" class="hidden">
+          <h1 class="text-2xl font-display font-extrabold dark:text-white text-zinc-900 mb-6">Saved Posts</h1>
+          <div id="saved-posts" class="flex flex-col gap-5"></div>
+          <div id="saved-empty" class="hidden text-center py-16">
+            <svg class="mx-auto mb-4 dark:text-zinc-700 text-zinc-300" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+            <p class="text-sm dark:text-zinc-500 text-zinc-400">No saved posts yet</p>
+            <p class="text-xs dark:text-zinc-600 text-zinc-400 mt-1">Tap the bookmark on any post to save it</p>
+          </div>
+        </section>
+
+      </div><!-- /max-w container -->
+    </div>
+  </main>
+
+  <!-- ── RIGHT SIDEBAR (desktop xl) ─────────────────────── -->
+  <aside class="hidden xl:flex fixed top-0 right-0 h-full w-72 flex-col py-6 px-5 gap-7 overflow-y-auto z-30 no-scrollbar
+                dark:bg-zinc-900/80 bg-white/80 glass
+                border-l dark:border-white/[0.06] border-black/[0.07]">
+
+    <!-- Who to follow -->
+    <div>
+      <h3 class="text-xs font-display font-bold dark:text-zinc-400 text-zinc-500 uppercase tracking-widest mb-3">Who to follow</h3>
+      <div id="who-to-follow" class="flex flex-col gap-3"></div>
+    </div>
+
+    <!-- Trending today -->
+    <div>
+      <h3 class="text-xs font-display font-bold dark:text-zinc-400 text-zinc-500 uppercase tracking-widest mb-3">Trending Today</h3>
+      <div id="trending-right" class="flex flex-col gap-2"></div>
+    </div>
+
+    <!-- Activity stats -->
+    <div>
+      <h3 class="text-xs font-display font-bold dark:text-zinc-400 text-zinc-500 uppercase tracking-widest mb-3">Your Activity</h3>
+      <div class="rounded-xl p-4 flex flex-col gap-3
+                  dark:bg-zinc-800/50 bg-zinc-50/80
+                  border dark:border-white/[0.05] border-black/[0.06]">
+        <div class="flex justify-between text-xs">
+          <span class="dark:text-zinc-400 text-zinc-500">Posts this week</span>
+          <span class="font-display font-bold dark:text-white text-zinc-900">7</span>
+        </div>
+        <div class="w-full h-1.5 rounded-full dark:bg-zinc-700 bg-zinc-200 overflow-hidden">
+          <div id="activity-bar" class="progress-fill h-full w-0"></div>
+        </div>
+        <div class="flex justify-between text-xs">
+          <span class="dark:text-zinc-400 text-zinc-500">Engagement rate</span>
+          <span class="font-display font-bold gradient-text">8.4%</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-1">
+          <div class="rounded-lg p-2 text-center dark:bg-zinc-700/50 bg-zinc-100/80">
+            <div class="text-sm font-display font-extrabold gradient-text">142</div>
+            <div class="text-[10px] dark:text-zinc-500 text-zinc-400">Likes</div>
+          </div>
+          <div class="rounded-lg p-2 text-center dark:bg-zinc-700/50 bg-zinc-100/80">
+            <div class="text-sm font-display font-extrabold gradient-text">38</div>
+            <div class="text-[10px] dark:text-zinc-500 text-zinc-400">Comments</div>
+          </div>
+          <div class="rounded-lg p-2 text-center dark:bg-zinc-700/50 bg-zinc-100/80">
+            <div class="text-sm font-display font-extrabold gradient-text">21</div>
+            <div class="text-[10px] dark:text-zinc-500 text-zinc-400">Shares</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating theme toggle for right sidebar -->
+    <button onclick="toggleTheme()"
+            class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm w-full transition-colors
+                   dark:bg-zinc-800 bg-zinc-100 dark:hover:bg-zinc-700 hover:bg-zinc-200
+                   dark:text-zinc-300 text-zinc-600">
+      <span id="icon-sun-2" class="hidden">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </span>
+      <span id="icon-moon-2">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </span>
+      <span id="theme-label">Switch to Light Mode</span>
+    </button>
+
+  </aside>
+
+</div><!-- /app shell -->
+
+<!-- ── MOBILE BOTTOM NAV ───────────────────────────────── -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 px-2 py-2 dark:bg-zinc-900/90 bg-white/90 glass border-t dark:border-white/[0.06] border-black/[0.07]">
+  <div class="flex justify-around items-center max-w-sm mx-auto">
+    <button onclick="showPage('feed')" class="flex flex-col items-center gap-0.5 p-2 dark:text-zinc-500 text-zinc-400">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </button>
+    <button onclick="showPage('explore')" class="flex flex-col items-center gap-0.5 p-2 dark:text-zinc-500 text-zinc-400">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <button onclick="openPostModal()" class="p-1">
+      <div class="btn-gradient w-11 h-11 rounded-xl flex items-center justify-center">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+    </button>
+    <button onclick="showPage('notifications')" class="relative flex flex-col items-center gap-0.5 p-2 dark:text-zinc-500 text-zinc-400">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge absolute top-1 right-1 w-4 h-4 notif-dot rounded-full text-white text-[9px] font-display flex items-center justify-center">3</span>
+    </button>
+    <button onclick="showPage('profile')" class="flex flex-col items-center gap-0.5 p-2 dark:text-zinc-500 text-zinc-400">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ══════════════ MODALS ══════════════════════════════════ -->
+
+<!-- ── New Post Modal ──────────────────────────────────── -->
+<div id="post-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div onclick="closePostModal()" class="absolute inset-0 dark:bg-zinc-950/85 bg-zinc-900/50 backdrop-blur-sm"></div>
+  <div class="relative z-10 w-full max-w-lg rounded-2xl modal-pop
+              dark:bg-zinc-900 bg-white
+              border dark:border-white/[0.08] border-black/[0.1]
+              shadow-2xl dark:shadow-zinc-950 shadow-zinc-200">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b dark:border-white/[0.06] border-black/[0.07]">
+      <h3 class="font-display font-bold dark:text-white text-zinc-900">Create Post</h3>
+      <button onclick="closePostModal()"
+              class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors
+                     dark:bg-zinc-800 bg-zinc-100 dark:text-zinc-400 text-zinc-500
+                     dark:hover:text-white hover:text-zinc-900">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <!-- Body -->
+    <div class="p-5">
+      <div class="flex items-start gap-3">
+        <div class="avatar-ring flex-shrink-0">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-display font-bold
+                      dark:bg-zinc-900 bg-rose-50 gradient-text">AJ</div>
+        </div>
+        <div class="flex-1">
+          <div class="font-display font-bold text-sm dark:text-white text-zinc-900 mb-2">Alex Jordan</div>
+          <select class="mb-3 text-xs px-2 py-1.5 rounded-lg transition-colors
+                         dark:bg-zinc-800 bg-zinc-100 dark:border-white/[0.06] border-black/[0.08] border
+                         dark:text-zinc-300 text-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-400/40">
+            <option>🌍 Public</option>
+            <option>👥 Friends</option>
+            <option>🔒 Only me</option>
+          </select>
+          <textarea id="post-content" rows="4"
+                    placeholder="What's on your mind?"
+                    class="w-full rounded-xl px-4 py-3 text-sm resize-none transition-all
+                           dark:bg-zinc-800/70 bg-zinc-50 dark:border-white/[0.06] border-black/[0.07] border
+                           dark:text-zinc-100 text-zinc-900 dark:placeholder-zinc-500 placeholder-zinc-400
+                           focus:outline-none focus:ring-2 focus:ring-rose-400/40"></textarea>
+          <!-- Image preview -->
+          <div id="post-image-preview" class="hidden mt-3 relative rounded-xl overflow-hidden dark:bg-zinc-800 bg-zinc-100">
+            <img id="post-img-el" class="w-full max-h-48 object-cover" src="" alt=""/>
+            <button onclick="removePostImage()"
+                    class="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center
+                           dark:bg-zinc-900/80 bg-white/80 glass dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <!-- Tags -->
+          <input type="text" id="post-tags" placeholder="Add tags: #design #dev"
+                 class="mt-3 w-full rounded-xl px-4 py-2.5 text-sm transition-all
+                        dark:bg-zinc-800/70 bg-zinc-50 dark:border-white/[0.06] border-black/[0.07] border
+                        dark:text-zinc-100 text-zinc-900 dark:placeholder-zinc-500 placeholder-zinc-400
+                        focus:outline-none focus:ring-2 focus:ring-rose-400/40"/>
+        </div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div class="flex items-center justify-between px-5 pb-5">
+      <div class="flex items-center gap-2">
+        <label class="cursor-pointer w-9 h-9 rounded-xl flex items-center justify-center transition-colors
+                      dark:bg-zinc-800 bg-zinc-100 dark:text-zinc-400 text-zinc-500 dark:hover:text-rose-400 hover:text-rose-500"
+               title="Add image">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(event)"/>
+        </label>
+        <button class="w-9 h-9 rounded-xl flex items-center justify-center transition-colors
+                       dark:bg-zinc-800 bg-zinc-100 dark:text-zinc-400 text-zinc-500 dark:hover:text-rose-400 hover:text-rose-500">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </button>
+        <span id="char-counter" class="text-xs dark:text-zinc-500 text-zinc-400 font-medium px-2">0 / 280</span>
+      </div>
+      <button onclick="submitPost()"
+              class="btn-gradient px-5 py-2.5 rounded-xl text-sm font-display font-bold text-white">
+        Publish
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Comments Modal ──────────────────────────────────── -->
+<div id="comments-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+  <div onclick="closeCommentsModal()" class="absolute inset-0 dark:bg-zinc-950/85 bg-zinc-900/50 backdrop-blur-sm"></div>
+  <div class="relative z-10 w-full sm:max-w-lg max-h-[80vh] flex flex-col rounded-t-3xl sm:rounded-2xl sheet-up sm:modal-pop
+              dark:bg-zinc-900 bg-white
+              border dark:border-white/[0.08] border-black/[0.1]
+              shadow-2xl">
+    <div class="flex items-center justify-between px-5 py-4 border-b dark:border-white/[0.06] border-black/[0.07]">
+      <h3 class="font-display font-bold dark:text-white text-zinc-900">
+        Comments <span id="comment-modal-count" class="dark:text-zinc-400 text-zinc-500 font-normal text-sm"></span>
+      </h3>
+      <button onclick="closeCommentsModal()"
+              class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors
+                     dark:bg-zinc-800 bg-zinc-100 dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="comments-list" class="flex-1 overflow-y-auto p-5 flex flex-col gap-4"></div>
+    <div class="px-4 pb-4 pt-3 border-t dark:border-white/[0.06] border-black/[0.07]">
+      <div class="flex items-center gap-3">
+        <div class="avatar-ring flex-shrink-0">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-display font-bold
+                      dark:bg-zinc-900 bg-rose-50 gradient-text">AJ</div>
+        </div>
+        <input type="text" id="comment-input"
+               placeholder="Add a comment…"
+               onkeydown="if(event.key==='Enter')submitComment()"
+               class="flex-1 px-4 py-2.5 rounded-xl text-sm transition-all
+                      dark:bg-zinc-800 bg-zinc-100 dark:border-white/[0.06] border-black/[0.07] border
+                      dark:text-zinc-100 text-zinc-900 dark:placeholder-zinc-500 placeholder-zinc-400
+                      focus:outline-none focus:ring-2 focus:ring-rose-400/40"/>
+        <button onclick="submitComment()"
+                class="btn-gradient w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-white">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── User Profile Modal ──────────────────────────────── -->
+<div id="user-profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div onclick="closeUserModal()" class="absolute inset-0 dark:bg-zinc-950/85 bg-zinc-900/50 backdrop-blur-sm"></div>
+  <div class="relative z-10 w-full max-w-md rounded-2xl overflow-hidden modal-pop
+              dark:bg-zinc-900 bg-white
+              border dark:border-white/[0.08] border-black/[0.1]
+              shadow-2xl">
+    <div id="umod-cover" class="h-24 w-full"></div>
+    <div class="px-5 pb-5 -mt-10">
+      <div class="flex items-end justify-between mb-3">
+        <div class="avatar-ring" style="padding:3px">
+          <div id="umod-avatar"
+               class="w-16 h-16 rounded-full flex items-center justify-center text-xl font-display font-extrabold
+                      dark:bg-zinc-900 bg-white"></div>
+        </div>
+        <button id="umod-follow-btn" onclick="toggleModalFollow()"
+                class="btn-gradient px-4 py-2 rounded-xl text-sm font-display font-bold text-white">Follow</button>
+      </div>
+      <div class="flex items-center gap-2 mb-0.5">
+        <h3 id="umod-name" class="font-display font-extrabold text-lg dark:text-white text-zinc-900"></h3>
+        <span class="verified-badge w-4 h-4"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+      </div>
+      <p id="umod-username" class="text-sm dark:text-zinc-400 text-zinc-500 mb-2"></p>
+      <p id="umod-bio"      class="text-sm dark:text-zinc-300 text-zinc-600 leading-relaxed mb-4"></p>
+      <div class="flex gap-5 text-sm">
+        <div>
+          <span id="umod-followers" class="font-display font-extrabold dark:text-white text-zinc-900"></span>
+          <span class="text-xs dark:text-zinc-400 text-zinc-500 ml-1">followers</span>
+        </div>
+        <div>
+          <span id="umod-following" class="font-display font-extrabold dark:text-white text-zinc-900"></span>
+          <span class="text-xs dark:text-zinc-400 text-zinc-500 ml-1">following</span>
+        </div>
+        <div>
+          <span id="umod-posts"     class="font-display font-extrabold dark:text-white text-zinc-900"></span>
+          <span class="text-xs dark:text-zinc-400 text-zinc-500 ml-1">posts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Followers / Following list modal ───────────────── -->
+<div id="follow-list-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div onclick="closeFollowListModal()" class="absolute inset-0 dark:bg-zinc-950/85 bg-zinc-900/50 backdrop-blur-sm"></div>
+  <div class="relative z-10 w-full max-w-sm max-h-[70vh] flex flex-col rounded-2xl modal-pop
+              dark:bg-zinc-900 bg-white
+              border dark:border-white/[0.08] border-black/[0.1]
+              shadow-2xl">
+    <div class="flex items-center justify-between px-5 py-4 border-b dark:border-white/[0.06] border-black/[0.07]">
+      <h3 id="follow-list-title" class="font-display font-bold dark:text-white text-zinc-900">Followers</h3>
+      <button onclick="closeFollowListModal()"
+              class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors
+                     dark:bg-zinc-800 bg-zinc-100 dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="follow-list-items" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3"></div>
+  </div>
+</div>
+
+<!-- ── Edit Profile Modal ──────────────────────────────── -->
+<div id="edit-profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div onclick="closeEditProfile()" class="absolute inset-0 dark:bg-zinc-950/85 bg-zinc-900/50 backdrop-blur-sm"></div>
+  <div class="relative z-10 w-full max-w-md rounded-2xl modal-pop
+              dark:bg-zinc-900 bg-white
+              border dark:border-white/[0.08] border-black/[0.1]
+              shadow-2xl">
+    <div class="flex items-center justify-between px-5 py-4 border-b dark:border-white/[0.06] border-black/[0.07]">
+      <h3 class="font-display font-bold dark:text-white text-zinc-900">Edit Profile</h3>
+      <button onclick="closeEditProfile()"
+              class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors
+                     dark:bg-zinc-800 bg-zinc-100 dark:text-zinc-400 text-zinc-500 dark:hover:text-white hover:text-zinc-900">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="p-5 flex flex-col gap-4">
+      <div>
+        <label class="block text-xs font-medium dark:text-zinc-400 text-zinc-500 mb-1.5">Name</label>
+        <input id="edit-name" type="text"
+               class="w-full px-4 py-2.5 rounded-xl text-sm transition-all
+                      dark:bg-zinc-800 bg-zinc-50 dark:border-white/[0.06] border-black/[0.08] border
+                      dark:text-zinc-100 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-rose-400/40"/>
+      </div>
+      <div>
+        <label class="block text-xs font-medium dark:text-zinc-400 text-zinc-500 mb-1.5">Username</label>
+        <input id="edit-username" type="text"
+               class="w-full px-4 py-2.5 rounded-xl text-sm transition-all
+                      dark:bg-zinc-800 bg-zinc-50 dark:border-white/[0.06] border-black/[0.08] border
+                      dark:text-zinc-100 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-rose-400/40"/>
+      </div>
+      <div>
+        <label class="block text-xs font-medium dark:text-zinc-400 text-zinc-500 mb-1.5">Bio</label>
+        <textarea id="edit-bio" rows="3"
+                  class="w-full px-4 py-2.5 rounded-xl text-sm resize-none transition-all
+                         dark:bg-zinc-800 bg-zinc-50 dark:border-white/[0.06] border-black/[0.08] border
+                         dark:text-zinc-100 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-rose-400/40"></textarea>
+      </div>
+      <div>
+        <label class="block text-xs font-medium dark:text-zinc-400 text-zinc-500 mb-1.5">Location</label>
+        <input id="edit-location" type="text"
+               class="w-full px-4 py-2.5 rounded-xl text-sm transition-all
+                      dark:bg-zinc-800 bg-zinc-50 dark:border-white/[0.06] border-black/[0.08] border
+                      dark:text-zinc-100 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-rose-400/40"/>
+      </div>
+      <div>
+        <label class="block text-xs font-medium dark:text-zinc-400 text-zinc-500 mb-1.5">Website</label>
+        <input id="edit-website" type="text"
+               class="w-full px-4 py-2.5 rounded-xl text-sm transition-all
+                      dark:bg-zinc-800 bg-zinc-50 dark:border-white/[0.06] border-black/[0.08] border
+                      dark:text-zinc-100 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-rose-400/40"/>
+      </div>
+    </div>
+    <div class="flex justify-end gap-3 px-5 pb-5">
+      <button onclick="closeEditProfile()"
+              class="px-4 py-2.5 rounded-xl text-sm transition-colors
+                     dark:bg-zinc-800 bg-zinc-100 dark:text-zinc-300 text-zinc-600
+                     dark:hover:bg-zinc-700 hover:bg-zinc-200">Cancel</button>
+      <button onclick="saveProfile()"
+              class="btn-gradient px-5 py-2.5 rounded-xl text-sm font-display font-bold text-white">
+        Save Changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast ───────────────────────────────────────────── -->
+<div id="toast" class="hidden fixed bottom-24 md:bottom-6 left-1/2 -translate-x-1/2 z-[200]
+                        px-5 py-3 rounded-xl text-sm font-medium pointer-events-none
+                        flex items-center gap-2 shadow-xl glass
+                        dark:bg-zinc-900/90 dark:border dark:border-white/10 dark:text-white
+                        bg-white/90 border border-black/10 text-zinc-900">
+  <span id="toast-msg"></span>
+</div>
+
+<!-- ── Scripts (order matters) ──────────────────────────── -->
+<script src="../js/data.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/components.js"></script>
+<script src="../js/actions.js"></script>
+<script src="../js/render.js"></script>
+
+<!-- Sync secondary theme toggle icons -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const orig_applyTheme = applyTheme;
+    window.applyTheme = function(theme) {
+      orig_applyTheme(theme);
+      const s2 = document.getElementById('icon-sun-2');
+      const m2 = document.getElementById('icon-moon-2');
+      const lbl = document.getElementById('theme-label');
+      if (s2) s2.classList.toggle('hidden', theme === 'light');
+      if (m2) m2.classList.toggle('hidden', theme === 'dark');
+      if (lbl) lbl.textContent = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    };
+    applyTheme(state.theme);
+  });
+
+  function logout() {
+    showToast('Logged out successfully');
+    // Add actual logout logic here
+    window.location.href = '/login';
+  }
+</script>
+
+</body>
+</html>

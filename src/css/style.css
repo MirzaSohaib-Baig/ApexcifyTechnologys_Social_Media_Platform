@@ -1,0 +1,152 @@
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+/* ── CSS custom properties for theming ── */
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+/* ── Font application ── */
+body { font-family: var(--font-body); }
+h1,h2,h3,h4,h5,.font-display { font-family: var(--font-display); }
+
+/* ── Gradient text utility (Tailwind can't do this) ── */
+.gradient-text {
+  background: linear-gradient(135deg, #f43f5e 0%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgb(100 100 120); border-radius: 99px; }
+.dark ::-webkit-scrollbar-thumb { background: rgb(50 50 70); }
+
+/* ── Story ring gradient border (needs pseudo element) ── */
+.story-ring {
+  background: linear-gradient(135deg, #f43f5e, #fb923c);
+  padding: 2.5px;
+  border-radius: 9999px;
+}
+.story-ring-inner {
+  padding: 2px;
+  border-radius: 9999px;
+}
+
+/* ── Avatar gradient ring ── */
+.avatar-ring {
+  background: linear-gradient(135deg, #f43f5e, #fb923c);
+  padding: 2px;
+  border-radius: 9999px;
+  display: inline-flex;
+}
+
+/* ── Like heart fill animation ── */
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.heart-pop { animation: heartPop 0.35s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+/* ── Page transitions ── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter { animation: fadeSlideUp 0.35s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+/* ── Modal pop ── */
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.93) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-pop { animation: modalPop 0.3s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+/* ── Sheet slide ── */
+@keyframes sheetUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sheet-up { animation: sheetUp 0.35s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+/* ── Progress bar gradient ── */
+.progress-fill {
+  background: linear-gradient(90deg, #f43f5e, #fb923c);
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+/* ── Verified badge gradient ── */
+.verified-badge {
+  background: linear-gradient(135deg, #f43f5e, #fb923c);
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Button primary gradient ── */
+.btn-gradient {
+  background: linear-gradient(135deg, #f43f5e, #e11d48);
+  box-shadow: 0 4px 16px rgb(244 63 94 / 0.35);
+  transition: box-shadow 0.2s ease, transform 0.15s ease, opacity 0.15s ease;
+}
+.btn-gradient:hover {
+  box-shadow: 0 6px 24px rgb(244 63 94 / 0.5);
+  transform: translateY(-1px);
+}
+.btn-gradient:active { transform: scale(0.97); }
+
+/* ── Notification dot gradient ── */
+.notif-dot {
+  background: linear-gradient(135deg, #f43f5e, #fb923c);
+}
+
+/* ── Cover gradient (profile) ── */
+.cover-gradient {
+  background: linear-gradient(135deg, #1e1b2e 0%, #3b0f1f 60%, #f43f5e44 100%);
+}
+.dark .cover-gradient {
+  background: linear-gradient(135deg, #1e1b2e 0%, #3b0f1f 60%, #f43f5e44 100%);
+}
+.light .cover-gradient,
+html:not(.dark) .cover-gradient {
+  background: linear-gradient(135deg, #fce7f3 0%, #ffdee9 60%, #f43f5e22 100%);
+}
+
+/* ── Trend number gradient ── */
+.trend-num {
+  font-family: var(--font-display);
+  background: linear-gradient(135deg, #f43f5e, #fb923c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Backdrop blur glass ── */
+.glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ── Nav active indicator ── */
+.nav-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 55%;
+  background: linear-gradient(180deg, #f43f5e, #fb923c);
+  border-radius: 0 4px 4px 0;
+}
+
+/* ── Hide scrollbar (stories row) ── */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
