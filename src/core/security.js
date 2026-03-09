@@ -7,14 +7,14 @@ const LOG = {
 };
 
 // Hash password
-function hashPassword(password) {
-  return bcrypt.hashSync(password, 10);
+async function hashPassword(password) {
+  return bcrypt.hash(password, 10);
 }
 
 // Verify password
 // Show me the full error in this function
-function verifyPassword(plainPassword, hashedPassword) {
-  return bcrypt.compareSync(plainPassword, hashedPassword);
+async function verifyPassword(plainPassword, hashedPassword) {
+  return bcrypt.compare(plainPassword, hashedPassword);
 }
 
 // Create access token
@@ -48,12 +48,13 @@ function decodeToken(token) {
   try {
     const decoded = jwt.verify(token, settings.JWT_SECRET_KEY, { algorithms: [settings.ALGORITHM] });
     const expiresAt = new Date(decoded.expires_at);
-    if (expiresAt > new Date()) {
-      return decoded;
+    if (expiresAt <= new Date()) {
+      LOG.error("Token has expired");
+      return null;
     }
-    return null;
+    return decoded;
   } catch (e) {
-    LOG.error(e.message);
+    LOG.error("Token decode failed:", e.message);
     return {};
   }
 }

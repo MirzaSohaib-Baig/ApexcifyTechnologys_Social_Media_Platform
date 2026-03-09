@@ -157,7 +157,7 @@ function buildCommentEl(c) {
   const div = document.createElement('div');
   div.className = 'flex gap-3 page-enter';
   div.innerHTML = `
-    ${buildAvatar(user, 'w-8 h-8', 'text-xs')}
+    ${buildAvatar(user, 'w-8 h-8', 'text-xs', 'h-9')}
     <div class="flex-1">
       <div class="rounded-xl px-3 py-2.5
                   dark:bg-zinc-800/60 bg-zinc-100/80">

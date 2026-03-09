@@ -81,9 +81,9 @@ const ICONS = {
 };
 
 // ── Avatar builder ────────────────────────────────────
-function buildAvatar(user, sizeClass = 'w-10 h-10', textClass = 'text-sm') {
+function buildAvatar(user, sizeClass = 'w-10 h-10', textClass = 'text-sm', mainHeight = '') {
   return `
-    <div class="avatar-ring flex-shrink-0" style="width:fit-content">
+    <div class="avatar-ring ${mainHeight} flex-shrink-0">
       <div class="${sizeClass} ${textClass} rounded-full flex items-center justify-center font-display font-bold
                   dark:bg-zinc-900 bg-rose-50"
            style="color:${user.color}">

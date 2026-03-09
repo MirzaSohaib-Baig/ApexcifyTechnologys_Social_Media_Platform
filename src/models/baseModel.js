@@ -1,25 +1,27 @@
-const { Model, DataTypes } = require("sequelize");
+const mongoose = require('mongoose');
 
-class BaseModel extends Model {
-  static init(attributes, options = {}) {
-    const baseAttributes = {
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4, // or () => uuid.v4()
-        allowNull: false,
-        unique: true,
-        primaryKey: true,
-      },
-    };
+// ── Shared schema options applied to every model ──────────────────────────────
+const BASE_OPTIONS = {
+  timestamps: true,   // createdAt + updatedAt added automatically
 
-    // merge base + custom attributes
-    const mergedAttributes = { ...baseAttributes, ...attributes };
+  toJSON: {
+    virtuals: true,
+    transform(_doc, ret) {
+      ret.id = ret._id.toString(); // expose id as a plain string
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    },
+  },
 
-    // force timestamps
-    const mergedOptions = { ...options, timestamps: true };
+  toObject: {
+    virtuals: true,
+  },
+};
 
-    return super.init(mergedAttributes, mergedOptions);
-  }
+function createSchema(fields = {}, extraOptions = {}) {
+  const options = { ...BASE_OPTIONS, ...extraOptions };
+  return new mongoose.Schema(fields, options);
 }
 
-module.exports = BaseModel;
+module.exports = { createSchema };
