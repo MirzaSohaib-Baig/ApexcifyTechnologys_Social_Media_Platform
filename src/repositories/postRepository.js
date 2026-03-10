@@ -6,10 +6,10 @@ class PostRepository extends BaseRepository {
     super(Post);
   }
 
-  // ── Feed ───────────────────────────────────────────────────────────────────
-
-  // Home feed: posts from a list of user IDs (the people someone follows)
-  // plus their own posts, newest first, paginated
+  async createPost(data) {
+    return this.create(data);
+  }
+  
   async getFeed(userIds, page = 1, limit = 20) {
     return this.getAll(
       { user: { $in: userIds }, share_with: 'public' },
@@ -76,6 +76,15 @@ class PostRepository extends BaseRepository {
       { new: true }
     );
   }
+
+  async updatePost(id, data) {
+    return this.update(id, data);
+  }
+
+  async deletePost(id) {
+    return this.delete(id);
+  }
+
 }
 
 module.exports = new PostRepository();

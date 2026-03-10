@@ -6,6 +6,10 @@ class UserRepository extends BaseRepository {
     super(User);
   }
 
+  async createUser(data) {
+    return this.create(data);
+  }
+
   async findByEmail(email) {
     return this.getOne({ email: email.toLowerCase() });
   }
@@ -16,6 +20,14 @@ class UserRepository extends BaseRepository {
 
   async findByEmailWithPassword(email) {
     return this.model.findOne({ email: email.toLowerCase() }).select('+password');
+  }
+
+  async updateUser(id, data) {
+    return this.update(id, data);
+  }
+
+  async deleteUser(id) {
+    return this.delete(id);
   }
 }
 

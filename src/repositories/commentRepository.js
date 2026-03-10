@@ -6,6 +6,10 @@ class CommentRepository extends BaseRepository {
     super(Comment);
   }
 
+    async createComment(data) {
+      return this.create(data);
+    }
+
   // All top-level comments on a post (no parent), oldest first
   // so comments read chronologically top to bottom
   async getByPost(postId, page = 1, limit = 20) {
@@ -56,6 +60,14 @@ class CommentRepository extends BaseRepository {
       { $inc: { likes_count: -1 } },
       { new: true }
     );
+  }
+
+  async updateComment(id, data) {
+    return this.update(id, data);
+  }
+
+  async deleteComment(id) {
+    return this.delete(id);
   }
 }
 

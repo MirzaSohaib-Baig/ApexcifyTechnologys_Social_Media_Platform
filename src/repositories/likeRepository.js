@@ -18,6 +18,26 @@ class LikeRepository extends BaseRepository {
     return this.getOne({ user: userId, comment: commentId });
   }
 
+  // ── Create ─────────────────────────────────────────────────────────────────
+
+  async likePost(userId, postId) {
+    return this.create({ user: userId, post: postId });
+  }
+
+  async likeComment(userId, commentId) {
+    return this.create({ user: userId, comment: commentId });
+  }
+
+  // ── Update ─────────────────────────────────────────────────────────────────
+  // (not currently used but could be useful for future features like "reacting" with different emojis instead of just liking)
+  async updatePostLike(id, data) {
+    return this.update(id, data);
+  }
+
+  async updateCommentLike(id, data) {
+    return this.update(id, data);
+  }
+
   // ── Delete by filter (not by id) ───────────────────────────────────────────
   // When unliking we know user+target, not the like's _id
 

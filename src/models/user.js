@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { createSchema } = require('./baseModel');
-const { hashPassword } = require('../core/security');
 
 const userSchema = createSchema({
 
@@ -23,21 +22,21 @@ userSchema.virtual('full_name').get(function () {
 });
 
 // ── Hook: hash password before save ──────────────────────────────────────────
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  try {
-    this.password = await hashPassword(this.password);
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
+// userSchema.pre('save', async function (next) {
+//   if (!this.isModified('password')) return next();
+//   try {
+//     this.password = await hashPassword(this.password);
+//     next();
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
 // ── Strip password from JSON responses ───────────────────────────────────────
-userSchema.methods.toJSON = function () {
-  const obj = this.toObject();
-  delete obj.password;
-  return obj;
-};
+// userSchema.methods.toJSON = function () {
+//   const obj = this.toObject();
+//   delete obj.password;
+//   return obj;
+// };
 
 module.exports = mongoose.model('User', userSchema);
